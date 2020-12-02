@@ -1,12 +1,16 @@
 package components.transportmodulecoordinatoractor.stateMachine;
 
 import com.github.oxo42.stateless4j.StateMachineConfig;
+import fiab.core.capabilities.BasicMachineStates;
 
-import static components.transportmodulecoordinatoractor.stateMachine.TransportCoordinatorStates.*;
+import static fiab.core.capabilities.BasicMachineStates.*;
+
+//import static components.transportmodulecoordinatoractor.stateMachine.TransportCoordinatorStates.*;
 import static components.transportmodulecoordinatoractor.stateMachine.TransportCoordinatorTriggers.*;
+import static fiab.core.capabilities.BasicMachineStates.*;
 
 public class TransportCoordinatorStateMachineConfig
-        extends StateMachineConfig<TransportCoordinatorStates, TransportCoordinatorTriggers> {
+        extends StateMachineConfig<BasicMachineStates, TransportCoordinatorTriggers> {
 
     TransportCoordinatorStateMachineConfig() {
         configure(STOPPING)

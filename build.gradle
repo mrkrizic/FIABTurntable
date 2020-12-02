@@ -1,3 +1,5 @@
+//import com.github.jengelman.gradle.plugins.shadow.transformers.AppendingTransformer
+
 plugins {
     id 'java'
     id 'application'
@@ -9,6 +11,7 @@ version '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
+    maven { url "https://jitpack.io" }
 }
 
 compileJava {
@@ -33,11 +36,14 @@ dependencies {
     implementation group: 'org.eclipse.milo', name: 'sdk-core', version: '0.3.7'
 
     // https://mvnrepository.com/artifact/com.github.oxo42/stateless4j
-    compile group: 'com.github.oxo42', name: 'stateless4j', version: '2.5.0'
-    compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.14.0'
-    compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.14.0'
+    implementation group: 'com.github.oxo42', name: 'stateless4j', version: '2.5.0'
+    implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.14.0'
+    implementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.14.0'
+    implementation "com.fasterxml.jackson.core:jackson-databind:2.9.9"
 
     implementation group: 'com.typesafe.akka', name: "akka-testkit_2.13", version: '2.6.10'
+
+    implementation("com.github.ev3dev-lang-java:ev3dev-lang-java:2.5.3")
 
     // https://mvnrepository.com/artifact/commons-io/commons-io
     implementation 'commons-io:commons-io:2.8.0'
@@ -53,4 +59,10 @@ jar {
 
 application {
     mainClassName = 'FIABTurntableApplication'
+}
+
+shadowJar {
+    transform(com.github.jengelman.gradle.plugins.shadow.transformers.AppendingTransformer) {
+        resource = 'reference.conf'
+    }
 }

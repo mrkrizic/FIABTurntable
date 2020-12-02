@@ -5,9 +5,7 @@ import c2akka.c2bricks.c2component.C2Component;
 import c2akka.c2bricks.c2component.NotificationHandler;
 import c2akka.c2bricks.c2component.RequestHandler;
 import c2akka.c2messages.C2Notification;
-import msg.notifications.ConveyorStatusUpdateNotification;
-import msg.notifications.MachineStatusUpdateNotification;
-import msg.notifications.TurntableStatusUpdateNotification;
+import msg.notifications.*;
 import msg.requests.InternalTransportModuleRequest;
 import msg.requests.OpcUaRequest;
 
@@ -22,9 +20,6 @@ public abstract class TransportModuleCoordinatorActorBase extends C2Component {
     @RequestHandler
     public abstract void handleOpcUaRequest(OpcUaRequest opcUaRequest);
 
-    @NotificationHandler
-    public abstract void handleMachineStatusUpdateNotification(MachineStatusUpdateNotification machineStatusUpdateNotification);
-
     @RequestHandler
     public abstract void handleInternalTransportModuleRequest(InternalTransportModuleRequest request);
 
@@ -33,4 +28,10 @@ public abstract class TransportModuleCoordinatorActorBase extends C2Component {
 
     @NotificationHandler
     public abstract void handleTurntableStatusUpdateNotification(TurntableStatusUpdateNotification turntableStatusUpdateNotification);
+
+    @NotificationHandler
+    public abstract void handleClientHandshakeNotification(ClientHandshakeNotification clientHandshakeNotification);
+
+    @NotificationHandler
+    public abstract void handleClientEndpointStatusNotification(ClientHandshakeEndpointNotification clientHandshakeEndpointNotification);
 }

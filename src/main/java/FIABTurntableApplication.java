@@ -1,5 +1,6 @@
 import c2akka.c2architecture.ApplicationProviderModule;
 import c2akka.c2architecture.C2ArchitectureBuilder;
+import com.google.inject.Binder;
 import fiab.core.capabilities.plotting.WellknownPlotterCapability;
 import fiab.opcua.server.NonEncryptionBaseOpcUaServer;
 import fiab.opcua.server.OPCUABase;
