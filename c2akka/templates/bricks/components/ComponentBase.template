@@ -1,0 +1,28 @@
+package components.PACKAGE_NAME.base;
+
+import akka.actor.ActorRef;
+import c2akka.c2bricks.c2component.C2Component;
+import c2akka.c2bricks.c2component.NotificationHandler;
+import c2akka.c2bricks.c2component.RequestHandler;
+import c2akka.c2messages.C2Notification;
+DEPENDENCIES
+
+public abstract class COMPONENT_NAMEBase extends C2Component {
+
+    private String id = "COMPONENT_ID";
+
+    public COMPONENT_NAMEBase(ActorRef connectorTopDomain, ActorRef connectorBottomDomain) {
+        super(connectorTopDomain, connectorBottomDomain);
+    }
+
+REQUEST_HANDLERS
+
+NOTIFICATION_HANDLERS
+
+    protected void addSupportedMessagesTopDomain(){
+SUPPORTED_MSG_TOP    }
+
+    protected void addSupportedMessagesBottomDomain(){
+SUPPORTED_MSG_BOTTOM    }
+
+}

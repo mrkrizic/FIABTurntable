@@ -1,0 +1,17 @@
+package modules;
+
+import akka.actor.ActorSystem;
+import c2akka.c2architecture.ApplicationProviderModule;
+import c2akka.c2bricks.c2connector.C2EmptyConnector;
+DEPENDENCIES
+public class PROJECT_NAMEModule extends ApplicationProviderModule {
+
+    @Override
+    protected void configure() {
+        bind(ActorSystem.class).toInstance(actorSystem);
+        bindSingletonActor(actorSystem, C2EmptyConnector.class, "NoConnector");
+        SINGLETONS
+        BINDINGS
+    }
+
+}

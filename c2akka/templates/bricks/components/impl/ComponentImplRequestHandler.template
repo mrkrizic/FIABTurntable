@@ -1,0 +1,4 @@
+    @RequestHandler
+    public void handleREQUEST_TYPE(REQUEST_TYPE request_type) {
+        //TODO implement method stub
+    }

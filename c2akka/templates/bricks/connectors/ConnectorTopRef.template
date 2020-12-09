@@ -1,0 +1,1 @@
+@Named("CONNECTOR_REF_NAME") ActorRef connector_ref

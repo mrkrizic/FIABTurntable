@@ -1,0 +1,18 @@
+import c2akka.c2architecture.ApplicationProviderModule;
+import c2akka.c2architecture.C2ArchitectureBuilder;
+import runner.PROJECT_NAMEApplicationRunner;
+import modules.PROJECT_NAMEModule;
+
+public class PROJECT_NAMEApplication {
+
+    public static void main(String[] args) {
+        ApplicationProviderModule module = new PROJECT_NAMEModule();
+        runApplication(module);
+    }
+
+    private static void runApplication(ApplicationProviderModule module){
+        new C2ArchitectureBuilder(PROJECT_NAMEApplicationRunner.class, module).buildArchitectureAndRun();
+    }
+
+
+}

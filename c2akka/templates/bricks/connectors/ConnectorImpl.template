@@ -1,0 +1,16 @@
+package connectors.connector_name;
+
+import akka.actor.ActorRef;
+import c2akka.c2bricks.c2connector.C2Connector;
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
+import connectors.connector_name.base.CONNECTOR_NAMEBase;
+
+public class CONNECTOR_NAMEImpl extends CONNECTOR_NAMEBase {
+
+    @Inject
+    public CONNECTOR_NAMEImpl(TOP_CONNECTOR_REFS_NAMED){
+        super(top_connector_refs);
+    }
+
+}

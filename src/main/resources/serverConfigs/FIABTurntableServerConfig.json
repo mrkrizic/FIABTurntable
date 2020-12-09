@@ -1,0 +1,6 @@
+{
+  "TURNTABLE_SERVER_CONFIG": {
+    "name": "FIABTurntable",
+    "portOffset": 0
+  }
+}

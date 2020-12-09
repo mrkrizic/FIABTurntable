@@ -1,0 +1,1 @@
+bindActor(actorSystem, COMPONENT_NAMEImpl.class, "COMPONENT_NAME");

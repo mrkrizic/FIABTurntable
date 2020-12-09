@@ -1,0 +1,2 @@
+    @RequestHandler
+    public abstract void handleREQUEST_TYPE(REQUEST_TYPE request_type);

@@ -1,0 +1,31 @@
+package runner;
+
+import java.util.Optional;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+import akka.actor.ActorRef;
+import akka.actor.ActorSystem;
+import c2akka.c2architecture.C2StartMessage;
+import c2akka.c2architecture.ApplicationRunner;
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
+
+public class PROJECT_NAMEApplicationRunner implements ApplicationRunner {
+
+    private final ActorSystem actorSystem;
+    private final List<ActorRef> bricks;
+
+    @Inject
+    public PROJECT_NAMEApplicationRunner(ActorSystem actorSystem ARGS) {
+        this.actorSystem = actorSystem;
+        this.bricks = new CopyOnWriteArrayList<>();
+ADD_BRICKS
+    }
+
+    @Override
+    public void start() {
+        for(ActorRef ref : bricks){
+            ref.tell(new C2StartMessage(), ActorRef.noSender());
+        }
+    }
+}

@@ -1,0 +1,22 @@
+package components.PACKAGE_NAME;
+
+import akka.actor.ActorRef;
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
+import c2akka.c2bricks.c2component.NotificationHandler;
+import c2akka.c2bricks.c2component.RequestHandler;
+DEPENDENCIES
+
+public class COMPONENT_NAMEImpl extends COMPONENT_NAMEBase {
+
+    @Inject
+    public COMPONENT_NAMEImpl(@Named("TOP_CONNECTOR") ActorRef connectorTopDomain,
+                             @Named("BOTTOM_CONNECTOR") ActorRef connectorBottomDomain) {
+        super(connectorTopDomain, connectorBottomDomain);
+    }
+
+REQUEST_HANDLERS
+
+NOTIFICATION_HANDLERS
+
+}

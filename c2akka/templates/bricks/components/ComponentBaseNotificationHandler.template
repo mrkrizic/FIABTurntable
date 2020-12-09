@@ -1,0 +1,2 @@
+    @NotificationHandler
+    public abstract void handleNOTIFICATION_TYPE(NOTIFICATION_TYPE notification_type);

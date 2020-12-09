@@ -1,0 +1,1 @@
+bindSingletonActor(actorSystem, CONNECTOR_NAMEImpl.class, "CONNECTOR_NAME");

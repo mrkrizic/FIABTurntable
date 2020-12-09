@@ -1,0 +1,4 @@
+    @NotificationHandler
+    public void handleNOTIFICATION_TYPE(NOTIFICATION_TYPE notification_type) {
+        //TODO implement method stub
+    }
