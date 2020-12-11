@@ -53,6 +53,7 @@ public class TransportModuleCoordinatorActorImpl extends TransportModuleCoordina
         fireStateMachineTrigger(TransportCoordinatorTriggers.DO_START);
         turnToSource(opcUaTransportRequest);
         log.info("Received Internal Transport Module Request");
+        publishNotification(new MachineStatusUpdateNotification(stateMachine.getState().name()));
     }
 
     @RequestHandler

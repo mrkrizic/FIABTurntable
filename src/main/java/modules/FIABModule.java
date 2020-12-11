@@ -43,7 +43,6 @@ public class FIABModule extends ApplicationProviderModule {
         ServerInfo serverInfo;
         if (serverConfig.isPresent()) {
             serverInfo = serverConfig.get();
-            serverInfo.setName("FIABLocalTurntable");
         } else {
             throw new ConfigurationException("Could not find ServerInfo! ");
         }

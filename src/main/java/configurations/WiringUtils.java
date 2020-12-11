@@ -21,10 +21,15 @@ public class WiringUtils {
             //File file = new File(wiringsFolder+machinePrefix + FILE);
             //HashMap<String, WiringInfo> info = objectMapper.readValue(file, new TypeReference<HashMap<String, WiringInfo>>() {
             //});
-            String fileName = wiringsFolder+machinePrefix + FILE;
+            String fileName = wiringsFolder + machinePrefix + FILE;
             InputStream in = WiringUtils.class.getResourceAsStream(fileName);
             HashMap<String, WiringInfo> info = objectMapper.readValue(in,
-                    new TypeReference<HashMap<String, WiringInfo>>() {});
+                    new TypeReference<HashMap<String, WiringInfo>>() {
+                    });
+            for(String key : info.keySet()){
+                WiringInfo i = info.get(key);
+                System.out.println("Key: " + key + ", info: " + i.getRemoteCapabilityId() + i.getRemoteEndpointURL() + i.getRemoteNodeId()+ i.getRemoteRole());
+            }
             return Optional.of(info);
         } catch (IOException e) {
             e.printStackTrace();

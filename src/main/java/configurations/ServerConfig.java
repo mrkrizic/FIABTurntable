@@ -3,21 +3,27 @@ package configurations;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Optional;
 
 public class ServerConfig {
 
-    private final static String configsFolder = "/serverConfigs/";
-    private final static String FILE = "FIABTurntableServerConfig.json";
+    public static String machineName;
+    private final static String configsFolder = System.getProperty("user.dir")+ "/serverConfigs/";
+
 
     public static Optional<ServerInfo> loadServerConfigFromFileSystem() {
+        String FILE = machineName + "ServerConfig.json";
         ObjectMapper objectMapper = new ObjectMapper();
         try {
+
             String fileName = configsFolder + FILE;
-            InputStream in = WiringUtils.class.getResourceAsStream(fileName);
+            InputStream in = Files.newInputStream(Paths.get(fileName));//WiringUtils.class.getClassLoader().getResourceAsStream(fileName);
             HashMap<String, ServerInfo> info = objectMapper.readValue(in,
                     new TypeReference<HashMap<String, ServerInfo>>() {
                     });
@@ -29,5 +35,9 @@ public class ServerConfig {
             e.printStackTrace();
             return Optional.empty();
         }
+    }
+
+    public static void setMachineName(String machineName) {
+        ServerConfig.machineName = machineName;
     }
 }

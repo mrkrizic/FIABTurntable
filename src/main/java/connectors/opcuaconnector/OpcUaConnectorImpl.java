@@ -21,6 +21,7 @@ import modules.opcua.OpcUaWrapper;
 import msg.notifications.MachineStatusUpdateNotification;
 import msg.requests.InternalTransportModuleRequest;
 import msg.requests.OpcUaRequest;
+import msg.requests.OpcUaTransportRequest;
 import org.eclipse.milo.opcua.sdk.server.nodes.UaFolderNode;
 import org.eclipse.milo.opcua.sdk.server.nodes.UaMethodNode;
 import org.eclipse.milo.opcua.sdk.server.nodes.UaVariableNode;
@@ -31,13 +32,15 @@ public class OpcUaConnectorImpl extends OpcUaConnectorBase {
 
     private final OpcUaWrapper opcUaWrapper;
     private final OPCUABase opcUaBase;
-    private final String machineName = "Turntable";
     private String currentState = "";
     private UaVariableNode statusVariableNode;
+    private boolean isWaitingForResponse;
+    private ActorRef transportClient;
 
     @Inject
     public OpcUaConnectorImpl(OpcUaWrapper opcUaWrapper) {
         super();
+        this.isWaitingForResponse = false;
         this.opcUaWrapper = opcUaWrapper;
         this.opcUaBase = opcUaWrapper.getOpcUaBase();
         Thread serverThread = new Thread(opcUaBase);
@@ -49,6 +52,11 @@ public class OpcUaConnectorImpl extends OpcUaConnectorBase {
     public Receive createReceive() {
         return super.createReceive()
                 .orElse(receiveBuilder()
+                        .match(OpcUaTransportRequest.class, request -> {
+                            isWaitingForResponse = true;
+                            transportClient = sender();
+                            publishRequest(request);
+                        })
                         .match(HandshakeCapability.ServerMessageTypes.class, msg -> {
                             log.info("Received ServerHandshakeMessage: " + msg);
                             publishRequest(new OpcUaRequest(msg));
@@ -58,10 +66,6 @@ public class OpcUaConnectorImpl extends OpcUaConnectorBase {
     }
 
     private void initServer() {
-        /*UaFolderNode root = opcUaBase.prepareRootNode();
-        UaFolderNode ttNode = opcUaBase.generateFolder(root, machineName, "Turntable_FU");
-        String coordinatorPrefix = machineName + "/" + "Turntable_FU";
-        */
         setTurntableFuOpcUaNodes(opcUaWrapper.getTurntableRoot()
                 , opcUaWrapper.getMachinePrefix());
         setupTurntableCapabilities(opcUaWrapper.getOpcUaBase(), opcUaWrapper.getTurntableRoot(), opcUaWrapper.getMachinePrefix());
@@ -69,6 +73,10 @@ public class OpcUaConnectorImpl extends OpcUaConnectorBase {
 
     @NotificationHandler
     public void handleMachineStatusUpdateNotification(MachineStatusUpdateNotification notification) {
+        if (isWaitingForResponse) {
+            transportClient.tell(notification, self());
+            transportClient = null;     //We don't need the ref anymore after we replied
+        }
         this.currentState = notification.getState();
         log.info("Received Updated State: " + notification.getState());
         statusVariableNode.setValue(new DataValue(new Variant(currentState)));
@@ -82,13 +90,20 @@ public class OpcUaConnectorImpl extends OpcUaConnectorBase {
     }
 
     private void setTurntableFuOpcUaNodes(UaFolderNode ttNode, String coordinatorPrefix) {
-        UaMethodNode n1 = opcUaBase.createPartialMethodNode(coordinatorPrefix, TurntableModuleWellknownCapabilityIdentifiers.SimpleMessageTypes.Reset.toString(), "Requests reset");
+        UaMethodNode n1 = opcUaBase.createPartialMethodNode(coordinatorPrefix,
+                TurntableModuleWellknownCapabilityIdentifiers.SimpleMessageTypes.Reset.toString(), "Requests reset");
         opcUaBase.addMethodNode(ttNode, n1, new ResetMethod(n1, self()));
-        UaMethodNode n2 = opcUaBase.createPartialMethodNode(coordinatorPrefix, TurntableModuleWellknownCapabilityIdentifiers.SimpleMessageTypes.Stop.toString(), "Requests stop");
+
+        UaMethodNode n2 = opcUaBase.createPartialMethodNode(coordinatorPrefix,
+                TurntableModuleWellknownCapabilityIdentifiers.SimpleMessageTypes.Stop.toString(), "Requests stop");
         opcUaBase.addMethodNode(ttNode, n2, new StopMethod(n2, self()));
-        UaMethodNode n3 = opcUaBase.createPartialMethodNode(coordinatorPrefix, TransportModuleCapability.OPCUA_TRANSPORT_REQUEST, "Requests transport");
+
+        UaMethodNode n3 = opcUaBase.createPartialMethodNode(coordinatorPrefix,
+                TransportModuleCapability.OPCUA_TRANSPORT_REQUEST, "Requests transport");
         opcUaBase.addMethodNode(ttNode, n3, new TransportRequest(n3, self()));
-        statusVariableNode = opcUaBase.generateStringVariableNode(ttNode, coordinatorPrefix, OPCUABasicMachineBrowsenames.STATE_VAR_NAME, BasicMachineStates.UNKNOWN);
+
+        statusVariableNode = opcUaBase.generateStringVariableNode(ttNode, coordinatorPrefix,
+                OPCUABasicMachineBrowsenames.STATE_VAR_NAME, BasicMachineStates.UNKNOWN);
     }
 
     private void setupTurntableCapabilities(OPCUABase opcuaBase, UaFolderNode ttNode, String path) {
@@ -98,10 +113,10 @@ public class OpcUaConnectorImpl extends OpcUaConnectorBase {
         UaFolderNode capability1 = opcuaBase.generateFolder(capabilitiesFolder, path,
                 "CAPABILITY", OPCUACapabilitiesAndWiringInfoBrowsenames.CAPABILITY);
         opcuaBase.generateStringVariableNode(capability1, path + "/CAPABILITY", OPCUACapabilitiesAndWiringInfoBrowsenames.TYPE,
-                new String(TransportModuleCapability.TRANSPORT_CAPABILITY_URI));
+                TransportModuleCapability.TRANSPORT_CAPABILITY_URI);
         opcuaBase.generateStringVariableNode(capability1, path + "/CAPABILITY", OPCUACapabilitiesAndWiringInfoBrowsenames.ID,
-                new String("DefaultTurntableCapabilityInstance"));
+                "DefaultTurntableCapabilityInstance");
         opcuaBase.generateStringVariableNode(capability1, path + "/CAPABILITY", OPCUACapabilitiesAndWiringInfoBrowsenames.ROLE,
-                new String(OPCUACapabilitiesAndWiringInfoBrowsenames.ROLE_VALUE_PROVIDED));
+                OPCUACapabilitiesAndWiringInfoBrowsenames.ROLE_VALUE_PROVIDED);
     }
 }

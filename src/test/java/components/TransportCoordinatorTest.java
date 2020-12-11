@@ -16,6 +16,7 @@ import components.clienthandshakewestactor.ClientHandshakeWestActorImpl;
 import components.conveyoractor.ConveyorActorImpl;
 import components.transportmodulecoordinatoractor.TransportModuleCoordinatorActorImpl;
 import components.turningactor.TurningActorImpl;
+import configurations.ServerConfig;
 import connectors.handshakeconnector.HandshakeConnectorImpl;
 import connectors.handshakeconnector.HandshakeConnectorImpl;
 import connectors.intramachineconnector.IntraMachineConnectorImpl;
@@ -62,6 +63,7 @@ public class TransportCoordinatorTest {
 
     @Before
     public void setup() {
+        ServerConfig.setMachineName("TestMachine");
         wrapper = createOpcUaWrapper();
         turningHardware = new TurningHardwareConfig().getTurningHardware();
         conveyorHardware = new ConveyorHardwareConfig().getConveyorHardware();
